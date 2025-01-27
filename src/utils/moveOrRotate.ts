@@ -5,15 +5,16 @@ import {
   Orientation,
   PositionAndOrientation,
   PositionAndOrientationAndLost,
+  Scent,
 } from '../types'
 import checkCoordinatesOffGrid from './checkCoordinatesOffGrid'
 import moveInDirection from './moveInDirection'
 import rotate from './rotate'
 
-const scents: Coordinates[] = []
+const scents: Scent[] = []
 
-const checkInScents = (position: Coordinates) =>
-  scents.some((coordinates) => coordinates[0] === position[0] && coordinates[1] === position[1])
+const checkInScents = (position: Coordinates, orientation: Orientation) =>
+  scents.some((scent) => scent[0] === scent[0] && scent[1] === position[1] && scent[2] === orientation)
 
 const moveOrRotate = (
   positionAndOrientation: PositionAndOrientation,
@@ -21,7 +22,7 @@ const moveOrRotate = (
   grid: Grid,
 ): PositionAndOrientationAndLost => {
   const currentPosition: Coordinates = [positionAndOrientation[0], positionAndOrientation[1]]
-  const orientation: Orientation = positionAndOrientation[2]
+  const currentOrientation: Orientation = positionAndOrientation[2]
   let newPositionOrientationAndLost: PositionAndOrientationAndLost
 
   if (grid?.[0] > 50 || grid?.[1] > 50) {
@@ -29,24 +30,24 @@ const moveOrRotate = (
   }
 
   if (instruction === 'F') {
-    const newPosition: Coordinates = moveInDirection(currentPosition, orientation)
+    const newPosition: Coordinates = moveInDirection(currentPosition, currentOrientation)
 
     // check if positions are off the grid
     if (checkCoordinatesOffGrid({ coordinates: newPosition, grid })) {
-      // when position is off gird check if there is scent of a prev robot that has been there
-      if (checkInScents(currentPosition)) {
-        // robot is safe and should not be moved off grid
-        newPositionOrientationAndLost = [...currentPosition, orientation]
+      // when position is off gird check if there is scent of a prev robot that has been there with the same orientation
+      if (checkInScents(currentPosition, currentOrientation)) {
+        // Robot is safe and should not be moved off grid
+        newPositionOrientationAndLost = [...currentPosition, currentOrientation]
       } else {
         // push the last on grid position to the scents
-        scents.push(currentPosition)
-        newPositionOrientationAndLost = [...currentPosition, orientation, 'LOST']
+        scents.push([...currentPosition, currentOrientation])
+        newPositionOrientationAndLost = [...currentPosition, currentOrientation, 'LOST']
       }
     } else {
-      newPositionOrientationAndLost = [...newPosition, orientation]
+      newPositionOrientationAndLost = [...newPosition, currentOrientation]
     }
   } else {
-    const newOrientation: Orientation = rotate(orientation, instruction)
+    const newOrientation: Orientation = rotate(currentOrientation, instruction)
     newPositionOrientationAndLost = [...currentPosition, newOrientation]
   }
 

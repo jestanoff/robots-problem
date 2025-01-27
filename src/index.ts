@@ -31,7 +31,7 @@ export default function processRobots(input: string): string {
     if (index % 3 === 0) {
       const [x, y, orientationRaw] = curr.split(' ')
       if (!isOrientation(orientationRaw)) throw new Error(`Invalid orientation: ${orientationRaw}`)
-      const initialPositionOrientation: PositionAndOrientation = [parseInt(x), parseInt(y), orientationRaw]
+      const initialPositionOrientation: PositionAndOrientation = [Number(x), Number(y), orientationRaw]
 
       const instructions = array[index + 1].split('')
       if (!instructions.every(isInstruction)) throw new Error(`Invalid instruction: ${instructions.join('')}`)
@@ -63,9 +63,9 @@ export default function processRobots(input: string): string {
       return moves
     }, [])
 
-    const currentOutput = movements[movements.length - 1].join(' ')
+    const lastGoodPosition = movements[movements.length - 1].join(' ')
 
-    return `${result}${robotNumber !== 0 ? '\n' : ''}${currentOutput}`
+    return `${result}${robotNumber !== 0 ? '\n' : ''}${lastGoodPosition}`
   }, '')
 
   console.log(`Output: ${output}`)
@@ -74,13 +74,13 @@ export default function processRobots(input: string): string {
 }
 
 if (require.main === module) {
-  const args = process.argv.slice(2);
-  const input = args.find(arg => arg.startsWith('--input='))?.split('=')[1];
+  const args = process.argv.slice(2)
+  const input = args.find((arg) => arg.startsWith('--input='))?.split('=')[1]
 
   if (!input) {
-    console.error('Please provide input using --input="<instructions>"');
-    process.exit(1);
+    console.error('Please provide input using --input="<instructions>"')
+    process.exit(1)
   }
 
-  processRobots(input);
+  processRobots(input)
 }

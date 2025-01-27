@@ -11,6 +11,7 @@ export type RobotInstruction = {
   initialPositionOrientation: PositionAndOrientation
   instructions: Array<Instruction>
 }
+export type Scent = [x: number, y: number, orientation: Orientation]
 
 export function isOrientation(value: string): value is Orientation {
   return ['N', 'S', 'E', 'W'].includes(value)

@@ -67,10 +67,12 @@ describe('moveOrRotate', () => {
       const position: Coordinates = [0, 0]
       const orientation: Orientation = 'W'
 
-      expect(() => moveOrRotate([...position, orientation], 'F', [51, 3, 0, 0]))
-        .toThrow('Grid upper bounds are greater than 50')
-      expect(() => moveOrRotate([...position, orientation], 'F', [-5, 52, 0, 0]))
-        .toThrow('Grid upper bounds are greater than 50')
+      expect(() => moveOrRotate([...position, orientation], 'F', [51, 3, 0, 0])).toThrow(
+        'Grid upper bounds are greater than 50',
+      )
+      expect(() => moveOrRotate([...position, orientation], 'F', [-5, 52, 0, 0])).toThrow(
+        'Grid upper bounds are greater than 50',
+      )
     })
   })
 })

@@ -16,4 +16,24 @@ LLFFFLFLFL`),
 3 3 N LOST
 2 3 S`)
   })
+
+  test('should handle complex movements with multiple lost robots', () => {
+    expect(
+      processRobots(`5 3
+0 0 N
+FRFRFRFRFRFRFRFRFLFLFLFLFLFLFLRFRF
+
+1 1 E
+FFFFFFFFFFFFFFFFFFFFFFFFFFRLRLRLRLRL
+
+2 2 S
+LFFFFFFFFFFFFFFFFFFFFFFFFFFFFFRFRFRF
+
+3 3 W
+RFFFFFFFFFFFFFFFFFFFFFFFFFFFFFLFLFLF`),
+    ).toBe(`0 1 W LOST
+5 1 E LOST
+5 2 E LOST
+3 2 E`)
+  })
 })
