@@ -15,7 +15,13 @@ LLFFFLFLFL`)).toBe(`1 1 E
 2 3 S`)
   })
 
-  test.todo('isRobotOffGrid')
+  test.todo('moveInDirection')
 
-  test.todo('areCoordinatesLastGoodLocation')
+  test.todo('areCoordinatesOffGrid')
+
+  test.todo('moveInDirection')
+
+  test.todo('moveOrRotate')
+
+  test.todo('rotate')
 })
