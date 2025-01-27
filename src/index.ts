@@ -1,4 +1,5 @@
 import { Coordinates, Instruction, PositionAndOrientation, isOrientation, isInstruction, PositionAndOrientationAndLost, Grid, Orientation, Direction } from './types'
+import checkCoordinatesOffGrid from './utils/checkCoordinatesOffGrid'
 import rotate from './utils/rotate'
 
 const lowerLeftBoundary: Coordinates = [0, 0]
@@ -9,16 +10,6 @@ type RobotInstruction = {
 }
 
 const scents: Coordinates[] = []
-
-function areCoordinatesOffGrid({ coordinates, grid }: { coordinates: Coordinates, grid: Grid }): boolean {
-  const [x, y] = coordinates
-  const [upperRightX, upperRightY, lowerLeftX, lowerLeftY] = grid
-
-  return x < lowerLeftX ||
-    x > upperRightX ||
-    y < lowerLeftY ||
-    y > upperRightY
-}
 
 function moveInDirection([x, y]: Coordinates, orientation: Orientation): Coordinates {
   switch (orientation) {
@@ -45,7 +36,7 @@ function moveOrRotate(positionAndOrientation: PositionAndOrientation, instructio
     let newPosition: Coordinates = moveInDirection(currentPosition, orientation)
 
     // check if positions are off the grid
-    if (areCoordinatesOffGrid({ coordinates: newPosition, grid })) {
+    if (checkCoordinatesOffGrid({ coordinates: newPosition, grid })) {
       // console.log('POSITION of grid', newPosition, grid)
       // when position is off gird check if there is scent of a prev robot that has been there
       if (scents.some((coordinates) => coordinates[0] === currentPosition[0] && coordinates[1] === currentPosition[1])) {
