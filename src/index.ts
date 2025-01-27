@@ -25,7 +25,6 @@ W  2 |_|_|_|_|_|_|    E
 
 export default function processRobots(input: string): string {
   const [upperRightBoundaryRaw, ...robotsInstructionsRaw] = input.split('\n')
-  console.log({ upperRightBoundaryRaw, robotsInstructionsRaw })
   const upperRightBoundary = upperRightBoundaryRaw.split(' ').map(Number) as Coordinates
   const grid: Grid = [...upperRightBoundary, ...lowerLeftBoundary]
   const robotsInstructions = robotsInstructionsRaw.reduce((acc: RobotInstruction[], curr: string, index, array) => {
@@ -85,5 +84,3 @@ if (require.main === module) {
 
   processRobots(input);
 }
-
-export { processRobots };

@@ -24,6 +24,10 @@ const moveOrRotate = (
   const orientation: Orientation = positionAndOrientation[2]
   let newPositionOrientationAndLost: PositionAndOrientationAndLost
 
+  if (grid?.[0] > 50 || grid?.[1] > 50) {
+    throw new Error('Grid upper bounds are greater than 50')
+  }
+
   if (instruction === 'F') {
     const newPosition: Coordinates = moveInDirection(currentPosition, orientation)
 
