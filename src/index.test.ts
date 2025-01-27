@@ -22,6 +22,4 @@ LLFFFLFLFL`)).toBe(`1 1 E
   test.todo('moveInDirection')
 
   test.todo('moveOrRotate')
-
-  test.todo('rotate')
 })

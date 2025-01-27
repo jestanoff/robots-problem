@@ -1,4 +1,5 @@
 import { Coordinates, Instruction, PositionAndOrientation, isOrientation, isInstruction, PositionAndOrientationAndLost, Grid, Orientation, Direction } from './types'
+import rotate from './utils/rotate'
 
 const lowerLeftBoundary: Coordinates = [0, 0]
 
@@ -34,21 +35,6 @@ function moveInDirection([x, y]: Coordinates, orientation: Orientation): Coordin
   }
 }
 
-function rotate(orientation: Orientation, direction: Direction): Orientation {
-  switch (orientation) {
-    case 'N':
-      return direction === 'L' ? 'E' : 'W';
-    case 'S':
-      return direction === 'L' ? 'W' : 'E';
-    case 'W':
-      return direction === 'L' ? 'N' : 'S';
-    case 'E':
-      return direction === 'L' ? 'S' : 'N';
-    default:
-      return orientation
-  }
-}
-
 
 function moveOrRotate(positionAndOrientation: PositionAndOrientation, instruction: Instruction, grid: Grid): PositionAndOrientationAndLost {
   const currentPosition: Coordinates = [positionAndOrientation[0], positionAndOrientation[1]]
@@ -60,7 +46,7 @@ function moveOrRotate(positionAndOrientation: PositionAndOrientation, instructio
 
     // check if positions are off the grid
     if (areCoordinatesOffGrid({ coordinates: newPosition, grid })) {
-      console.log('POSITION of grid', newPosition, grid)
+      // console.log('POSITION of grid', newPosition, grid)
       // when position is off gird check if there is scent of a prev robot that has been there
       if (scents.some((coordinates) => coordinates[0] === currentPosition[0] && coordinates[1] === currentPosition[1])) {
         // robot is safe and should not be moved off grid
@@ -85,7 +71,7 @@ function moveOrRotate(positionAndOrientation: PositionAndOrientation, instructio
 ---------- N ----------
 |  y                  |
 |  3 |_|_|_|_|_|_|    |
-E  2 |_|_|_|_|_|_|    W
+W  2 |_|_|_|_|_|_|    E
 |  1 |_|_|_|_|_|_|    |
 |  0 |_|_|_|_|_|_|    |
 |     0 1 2 3 4 5  x  |
@@ -93,7 +79,6 @@ E  2 |_|_|_|_|_|_|    W
 */
 
 export default function main(input: string): string {
-
   console.log('Moving robots, please wait for output ...')
   const [upperRightBoundaryRaw, ...robotsInstructionsRaw] = input.split(/\r\n|\r|\n/)
   const upperRightBoundary = upperRightBoundaryRaw.split(' ').map(Number) as Coordinates
@@ -135,14 +120,14 @@ export default function main(input: string): string {
         return accu
       }, [])
       currentOutput = movements[movements.length - 1].join(' ')
-      console.log('currentOutput', currentOutput)
+      // console.log('currentOutput', currentOutput)
     } else {
       currentOutput = initialPositionOrientation.join(' ')
     }
 
     return `${result}\n${currentOutput}`
   }, '')
-  console.log('output', output)
+  // console.log('output', output)
 
   return output
 }
