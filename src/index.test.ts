@@ -2,7 +2,8 @@ import move from './'
 
 describe('Martian Robots', () => {
   test('test main functionality', () => {
-    expect(move(`5 3
+    expect(
+      move(`5 3
 1 1 E
 RFRFRFRF
 
@@ -10,16 +11,9 @@ RFRFRFRF
 FRRFLLFFRRFLL
 
 0 3 W
-LLFFFLFLFL`)).toBe(`1 1 E
+LLFFFLFLFL`),
+    ).toBe(`1 1 E
 3 3 N LOST
 2 3 S`)
   })
-
-  test.todo('moveInDirection')
-
-  test.todo('areCoordinatesOffGrid')
-
-  test.todo('moveInDirection')
-
-  test.todo('moveOrRotate')
 })

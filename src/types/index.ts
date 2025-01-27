@@ -1,6 +1,6 @@
 export type Direction = 'L' | 'R'
 export type Forward = 'F'
-export type Instruction = Direction | Forward 
+export type Instruction = Direction | Forward
 export type Coordinates = [x: number, y: number]
 export type Orientation = 'N' | 'S' | 'E' | 'W'
 export type PositionAndOrientation = [x: number, y: number, orientation: Orientation]
@@ -17,10 +17,12 @@ export function isInstruction(value: string): value is Instruction {
 }
 
 export function isPositionAndOrientation(value: unknown): value is PositionAndOrientation {
-  return Array.isArray(value) &&
+  return (
+    Array.isArray(value) &&
     value.length === 3 &&
     typeof value[0] === 'number' &&
     typeof value[1] === 'number' &&
     typeof value[2] === 'string' &&
     isOrientation(value[2])
+  )
 }

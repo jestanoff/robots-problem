@@ -19,16 +19,16 @@ describe('Rotate', () => {
   test.each(CARDINAL_DIRECTIONS_ROTATE_LEFT_MATRIX)(
     'should rotate LEFT from %s to get %s',
     (startOrientation, direction, expectedOrientation) => {
-      const appliedOrientation = rotate(startOrientation, direction);
+      const appliedOrientation = rotate(startOrientation, direction)
       expect(appliedOrientation).toBe(expectedOrientation)
-    }
+    },
   )
 
   test.each(CARDINAL_DIRECTIONS_ROTATE_RIGHT_MATRIX)(
     'should rotate RIGHT from %s to get %s',
     (startOrientation, direction, expectedOrientation) => {
-      const appliedOrientation = rotate(startOrientation, direction);
+      const appliedOrientation = rotate(startOrientation, direction)
       expect(appliedOrientation).toBe(expectedOrientation)
-    }
+    },
   )
 })

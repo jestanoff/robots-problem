@@ -93,36 +93,36 @@ describe('checkCoordinatesOffGrid', () => {
       const grid: Grid = [1, 3, 2, 0]
       const coordinates: Coordinates = [1, 1]
 
-      expect(() =>
-        checkCoordinatesOffGrid({ coordinates, grid })
-      ).toThrow('upper X coordinate cannot be lower or equal to the lower X coordinate')
+      expect(() => checkCoordinatesOffGrid({ coordinates, grid })).toThrow(
+        'upper X coordinate cannot be lower or equal to the lower X coordinate',
+      )
     })
 
     it('should throw error when upper right Y is lower than lower left Y', () => {
       const grid: Grid = [5, 1, 0, 2]
       const coordinates: Coordinates = [1, 1]
 
-      expect(() =>
-        checkCoordinatesOffGrid({ coordinates, grid })
-      ).toThrow('upper Y coordinate cannot be lower or equal to the lower Y coordinate')
+      expect(() => checkCoordinatesOffGrid({ coordinates, grid })).toThrow(
+        'upper Y coordinate cannot be lower or equal to the lower Y coordinate',
+      )
     })
 
     it('should throw error when upper right X equals lower left X', () => {
       const grid: Grid = [2, 3, 2, 0]
       const coordinates: Coordinates = [1, 1]
 
-      expect(() =>
-        checkCoordinatesOffGrid({ coordinates, grid })
-      ).toThrow('upper X coordinate cannot be lower or equal to the lower X coordinate')
+      expect(() => checkCoordinatesOffGrid({ coordinates, grid })).toThrow(
+        'upper X coordinate cannot be lower or equal to the lower X coordinate',
+      )
     })
 
     it('should throw error when upper right Y equals lower left Y', () => {
       const grid: Grid = [5, 2, 0, 2]
       const coordinates: Coordinates = [1, 1]
 
-      expect(() =>
-        checkCoordinatesOffGrid({ coordinates, grid })
-      ).toThrow('upper Y coordinate cannot be lower or equal to the lower Y coordinate')
+      expect(() => checkCoordinatesOffGrid({ coordinates, grid })).toThrow(
+        'upper Y coordinate cannot be lower or equal to the lower Y coordinate',
+      )
     })
   })
 })

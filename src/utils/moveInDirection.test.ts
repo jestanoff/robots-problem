@@ -1,5 +1,5 @@
 import moveInDirection from './moveInDirection'
-import { Coordinates, Orientation } from '../types'
+import { Coordinates } from '../types'
 
 describe('moveInDirection', () => {
   const startPosition: Coordinates = [2, 2]
