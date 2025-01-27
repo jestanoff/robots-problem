@@ -7,6 +7,10 @@ export type PositionAndOrientation = [x: number, y: number, orientation: Orienta
 export type Lost = 'LOST'
 export type Grid = [upperRightX: number, upperRightY: number, lowerLeftX: number, lowerLeftY: number]
 export type PositionAndOrientationAndLost = [x: number, y: number, orientation: Orientation, lost?: Lost]
+export type RobotInstruction = {
+  initialPositionOrientation: PositionAndOrientation
+  instructions: Array<Instruction>
+}
 
 export function isOrientation(value: string): value is Orientation {
   return ['N', 'S', 'E', 'W'].includes(value)

@@ -15,14 +15,14 @@ describe('moveInDirection', () => {
       expect(result).toEqual([2, 1])
     })
 
-    it('should decrease X when moving East', () => {
+    it('should increase X when moving East', () => {
       const result = moveInDirection(startPosition, 'E')
-      expect(result).toEqual([1, 2])
+      expect(result).toEqual([3, 2])
     })
 
-    it('should increase X when moving West', () => {
+    it('should decrease X when moving West', () => {
       const result = moveInDirection(startPosition, 'W')
-      expect(result).toEqual([3, 2])
+      expect(result).toEqual([1, 2])
     })
   })
 
@@ -30,13 +30,13 @@ describe('moveInDirection', () => {
     it('should handle moving from [0,0]', () => {
       const origin: Coordinates = [0, 0]
       expect(moveInDirection(origin, 'N')).toEqual([0, 1])
-      expect(moveInDirection(origin, 'E')).toEqual([-1, 0])
+      expect(moveInDirection(origin, 'E')).toEqual([1, 0])
     })
 
     it('should handle negative coordinates', () => {
       const negativePosition: Coordinates = [-1, -1]
       expect(moveInDirection(negativePosition, 'N')).toEqual([-1, 0])
-      expect(moveInDirection(negativePosition, 'W')).toEqual([0, -1])
+      expect(moveInDirection(negativePosition, 'W')).toEqual([-2, -1])
     })
   })
 })

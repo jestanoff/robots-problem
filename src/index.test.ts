@@ -1,9 +1,9 @@
-import move from './'
+import processRobots from './'
 
 describe('Martian Robots', () => {
-  test('test main functionality', () => {
+  test('should work for example movements', () => {
     expect(
-      move(`5 3
+      processRobots(`5 3
 1 1 E
 RFRFRFRF
 

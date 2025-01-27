@@ -1,63 +1,16 @@
 import {
   Coordinates,
-  Instruction,
   PositionAndOrientation,
   isOrientation,
   isInstruction,
   PositionAndOrientationAndLost,
   Grid,
-  Orientation,
+  isPositionAndOrientation,
+  RobotInstruction,
 } from './types'
-import checkCoordinatesOffGrid from './utils/checkCoordinatesOffGrid'
-import moveInDirection from './utils/moveInDirection'
-import rotate from './utils/rotate'
+import moveOrRotate from './utils/moveOrRotate'
 
 const lowerLeftBoundary: Coordinates = [0, 0]
-
-type RobotInstruction = {
-  initialPositionOrientation: PositionAndOrientation
-  instructions: Array<Instruction>
-}
-
-const scents: Coordinates[] = []
-
-const checkInScents = (position: Coordinates) =>
-  scents.some((coordinates) => coordinates[0] === position[0] && coordinates[1] === position[1])
-
-function moveOrRotate(
-  positionAndOrientation: PositionAndOrientation,
-  instruction: Instruction,
-  grid: Grid,
-): PositionAndOrientationAndLost {
-  const currentPosition: Coordinates = [positionAndOrientation[0], positionAndOrientation[1]]
-  const orientation: Orientation = positionAndOrientation[2]
-  let newPositionOrientationAndLost: PositionAndOrientationAndLost
-
-  if (instruction === 'F') {
-    const newPosition: Coordinates = moveInDirection(currentPosition, orientation)
-
-    // check if positions are off the grid
-    if (checkCoordinatesOffGrid({ coordinates: newPosition, grid })) {
-      console.log('POSITION of grid', newPosition, grid)
-      // when position is off gird check if there is scent of a prev robot that has been there
-      if (checkInScents(currentPosition)) {
-        // robot is safe and should not be moved off grid
-        newPositionOrientationAndLost = [...currentPosition, orientation]
-      } else {
-        // push the last on grid position to the scents
-        scents.push(currentPosition)
-        newPositionOrientationAndLost = [...currentPosition, orientation, 'LOST']
-      }
-    } else {
-      newPositionOrientationAndLost = [...currentPosition, orientation]
-    }
-  } else {
-    const newOrientation: Orientation = rotate(orientation, instruction)
-    newPositionOrientationAndLost = [...currentPosition, newOrientation]
-  }
-
-  return newPositionOrientationAndLost
-}
 
 /*
 ---------- N ----------
@@ -70,7 +23,7 @@ W  2 |_|_|_|_|_|_|    E
 ---------- S ----------
 */
 
-export default function main(input: string): string {
+export default function processRobots(input: string): string {
   console.log('Moving robots, please wait for output ...')
   const [upperRightBoundaryRaw, ...robotsInstructionsRaw] = input.split(/\r\n|\r|\n/)
   const upperRightBoundary = upperRightBoundaryRaw.split(' ').map(Number) as Coordinates
@@ -89,47 +42,34 @@ export default function main(input: string): string {
     return acc
   }, [])
 
-  const output = robotsInstructions.reduce((result, robotData) => {
-    let currentOutput
+  const output = robotsInstructions.reduce((result, robotData, robotNumber) => {
     const { initialPositionOrientation, instructions } = robotData
 
-    if (instructions.length > 0) {
-      const movements = instructions.reduce((accu: PositionAndOrientationAndLost[], instruction, index) => {
-        let newPosition: PositionAndOrientationAndLost
-        if (index === 0) {
-          newPosition = moveOrRotate(initialPositionOrientation, instruction, grid)
-        } else {
-          const prevPosition = accu[index - 1]
-          newPosition = moveOrRotate([prevPosition[0], prevPosition[1], prevPosition[2]], instruction, grid)
+    const movements = instructions.reduce((moves: PositionAndOrientationAndLost[], instruction, index) => {
+      let newPosition: PositionAndOrientationAndLost
+      if (index === 0) {
+        newPosition = moveOrRotate(initialPositionOrientation, instruction, grid)
+      } else {
+        const prevPosition = moves[index - 1]
+
+        if (!isPositionAndOrientation(prevPosition)) {
+          return moves
         }
 
-        // if (isPositionAndOrientation(newPosition)) {
-        accu.push(newPosition)
-        // } else {
-        //   const prevPosition = accu[index - 1]
-        //   accu.push([prevPosition[0], prevPosition[1], prevPosition[2], 'LOST'])
-        // }
-        return accu
-      }, [])
-      currentOutput = movements[movements.length - 1].join(' ')
-      // console.log('currentOutput', currentOutput)
-    } else {
-      currentOutput = initialPositionOrientation.join(' ')
-    }
+        newPosition = moveOrRotate([prevPosition[0], prevPosition[1], prevPosition[2]], instruction, grid)
+      }
 
-    return `${result}\n${currentOutput}`
+      moves.push(newPosition)
+
+      return moves
+    }, [])
+
+    const currentOutput = movements[movements.length - 1].join(' ')
+
+    return `${result}${robotNumber !== 0 ? '\n' : ''}${currentOutput}`
   }, '')
-  // console.log('output', output)
+
+  console.log(`Output: ${output}`)
 
   return output
 }
-
-main(`5 3
-1 1 E
-RFRFRFRF
-
-3 2 N
-FRRFLLFFRRFLL
-
-0 3 W
-LLFFFLFLFL`)

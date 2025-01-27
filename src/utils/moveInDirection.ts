@@ -7,9 +7,9 @@ const moveInDirection = ([x, y]: Coordinates, orientation: Orientation): Coordin
     case 'S':
       return [x, y - 1]
     case 'E':
-      return [x - 1, y]
-    case 'W':
       return [x + 1, y]
+    case 'W':
+      return [x - 1, y]
     default:
       return [x, y]
   }
