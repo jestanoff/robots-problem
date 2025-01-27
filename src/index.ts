@@ -13,7 +13,7 @@ W  2 |_|_|_|_|_|_|    E
 ---------- S ----------
 */
 
-export default function processRobots(input: string): string {
+export default function main(input: string): string {
   const [upperRightBoundaryRaw, ...robotsInstructionsRaw] = input.split('\n')
   const upperRightBoundary = upperRightBoundaryRaw.split(' ').map(Number) as Coordinates
   const grid: Grid = [...upperRightBoundary, ...LOWER_LEFT_BOUNDARY]
@@ -52,5 +52,5 @@ if (require.main === module) {
     process.exit(1)
   }
 
-  processRobots(input)
+  main(input)
 }
