@@ -1,10 +1,4 @@
-import {
-  Coordinates,
-  isOrientation,
-  isInstruction,
-  Grid,
-  RobotInstruction,
-} from './types'
+import { Coordinates, isOrientation, isInstruction, Grid, RobotInstruction } from './types'
 import { INPUT_ARG, LOWER_LEFT_BOUNDARY } from './utils/constants'
 import moveOrRotate from './utils/moveOrRotate'
 

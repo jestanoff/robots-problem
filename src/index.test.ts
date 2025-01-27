@@ -36,4 +36,16 @@ RFFFFFFFFFFFFFFFFFFFFFFFFFFFFFLFLFLF`),
 5 2 E LOST
 3 2 E`)
   })
+
+  test('should work for another human tested case', () => {
+    expect(
+      processRobots(`10 10
+1 0 N
+FFRRFFF
+
+1 3 S
+FFFFRFF`),
+    ).toBe(`1 0 S LOST
+0 0 W LOST`)
+  })
 })

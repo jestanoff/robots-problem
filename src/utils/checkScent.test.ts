@@ -40,7 +40,7 @@ describe('checkScent', () => {
     const scents: Scent[] = [
       [3, 3, 'N'],
       [2, 1, 'E'],
-      [0, 0, 'W']
+      [0, 0, 'W'],
     ]
 
     expect(checkScent(position, orientation, scents)).toBe(true)
@@ -52,7 +52,7 @@ describe('checkScent', () => {
     const scents: Scent[] = [
       [3, 3, 'N'],
       [2, 1, 'E'],
-      [0, 0, 'W']
+      [0, 0, 'W'],
     ]
 
     expect(checkScent(position, orientation, scents)).toBe(false)

@@ -13,7 +13,11 @@ export type RobotInstruction = {
 }
 export type Scent = [x: number, y: number, orientation: Orientation]
 export type ProcessInstructionsParams = {
-  position: Coordinates, orientation: Orientation, instructions: Instruction[], grid: Grid, isRobotLost?: boolean
+  position: Coordinates
+  orientation: Orientation
+  instructions: Instruction[]
+  grid: Grid
+  isRobotLost?: boolean
 }
 
 export function isOrientation(value: string): value is Orientation {

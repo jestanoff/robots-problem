@@ -15,14 +15,20 @@ import { INSTRUCTIONS, LOST } from './constants'
 
 const scents: Scent[] = []
 
-const processInstructions = ({ position, orientation, instructions, grid, isRobotLost }: ProcessInstructionsParams): PositionAndOrientationAndLost => {
+const processInstructions = ({
+  position,
+  orientation,
+  instructions,
+  grid,
+  isRobotLost,
+}: ProcessInstructionsParams): PositionAndOrientationAndLost => {
   if (isRobotLost) {
-    return [...position, orientation, LOST];
+    return [...position, orientation, LOST]
   }
 
   // When all instructions are processed return current position and orientation
   if (instructions.length === 0) {
-    return [...position, orientation];
+    return [...position, orientation]
   }
 
   const [currentInstruction, ...restInstructions] = instructions
@@ -55,12 +61,16 @@ const moveOrRotate = (
   instructions: Instruction[],
   grid: Grid,
 ): string => {
-
   if (grid?.[0] > 50 || grid?.[1] > 50) {
     throw new Error('Grid upper x or y limit is greater than 50')
   }
 
-  const lastGoodPositionAndOrientation = processInstructions({ position: initialPosition, orientation, instructions, grid })
+  const lastGoodPositionAndOrientation = processInstructions({
+    position: initialPosition,
+    orientation,
+    instructions,
+    grid,
+  })
   return lastGoodPositionAndOrientation.join(' ')
 }
 
