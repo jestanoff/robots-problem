@@ -3,10 +3,10 @@ export type Forward = 'F'
 export type Instruction = Direction | Forward 
 export type Coordinates = [x: number, y: number]
 export type Orientation = 'N' | 'S' | 'E' | 'W'
-export type PositionAndOrientation = [x: number, y: number, Orientation]
+export type PositionAndOrientation = [x: number, y: number, orientation: Orientation]
 export type Lost = 'LOST'
 export type Grid = [upperRightX: number, upperRightY: number, lowerLeftX: number, lowerLeftY: number]
-export type PositionAndOrientationAndLost = [x: number, y: number, Orientation, Lost?]
+export type PositionAndOrientationAndLost = [x: number, y: number, orientation: Orientation, lost?: Lost]
 
 export function isOrientation(value: string): value is Orientation {
   return ['N', 'S', 'E', 'W'].includes(value)

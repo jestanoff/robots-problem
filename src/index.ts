@@ -34,7 +34,19 @@ function moveInDirection([x, y]: Coordinates, orientation: Orientation): Coordin
   }
 }
 
-function rotate(orientation: Orientation, direction: Direction) {
+function rotate(orientation: Orientation, direction: Direction): Orientation {
+  switch (orientation) {
+    case 'N':
+      return direction === 'L' ? 'E' : 'W';
+    case 'S':
+      return direction === 'L' ? 'W' : 'E';
+    case 'W':
+      return direction === 'L' ? 'N' : 'S';
+    case 'E':
+      return direction === 'L' ? 'S' : 'N';
+    default:
+      return orientation
+  }
 }
 
 
@@ -62,8 +74,8 @@ function moveOrRotate(positionAndOrientation: PositionAndOrientation, instructio
       newPositionOrientationAndLost = [...currentPosition, orientation]
     }
   } else {
-    // rotate()
-    newPositionOrientationAndLost = [0, 0, 'S', 'LOST']
+    const newOrientation: Orientation = rotate(orientation, instruction)
+    newPositionOrientationAndLost = [...currentPosition, newOrientation]
   }
 
   return newPositionOrientationAndLost
