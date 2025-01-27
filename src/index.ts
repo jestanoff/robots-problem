@@ -1,16 +1,12 @@
 import {
   Coordinates,
-  PositionAndOrientation,
   isOrientation,
   isInstruction,
-  PositionAndOrientationAndLost,
   Grid,
-  isPositionAndOrientation,
   RobotInstruction,
 } from './types'
+import { INPUT_ARG, LOWER_LEFT_BOUNDARY } from './utils/constants'
 import moveOrRotate from './utils/moveOrRotate'
-
-const lowerLeftBoundary: Coordinates = [0, 0]
 
 /*
 ---------- N ----------
@@ -26,46 +22,25 @@ W  2 |_|_|_|_|_|_|    E
 export default function processRobots(input: string): string {
   const [upperRightBoundaryRaw, ...robotsInstructionsRaw] = input.split('\n')
   const upperRightBoundary = upperRightBoundaryRaw.split(' ').map(Number) as Coordinates
-  const grid: Grid = [...upperRightBoundary, ...lowerLeftBoundary]
+  const grid: Grid = [...upperRightBoundary, ...LOWER_LEFT_BOUNDARY]
   const robotsInstructions = robotsInstructionsRaw.reduce((acc: RobotInstruction[], curr: string, index, array) => {
     if (index % 3 === 0) {
-      const [x, y, orientationRaw] = curr.split(' ')
-      if (!isOrientation(orientationRaw)) throw new Error(`Invalid orientation: ${orientationRaw}`)
-      const initialPositionOrientation: PositionAndOrientation = [Number(x), Number(y), orientationRaw]
+      const [x, y, orientation] = curr.split(' ')
+      if (!isOrientation(orientation)) throw new Error(`Invalid orientation: ${orientation}`)
+      const initialPosition: Coordinates = [Number(x), Number(y)]
 
       const instructions = array[index + 1].split('')
       if (!instructions.every(isInstruction)) throw new Error(`Invalid instruction: ${instructions.join('')}`)
 
-      acc.push({ initialPositionOrientation, instructions })
+      acc.push({ initialPosition, instructions, orientation })
     }
     return acc
   }, [])
 
   const output = robotsInstructions.reduce((result, robotData, robotNumber) => {
-    const { initialPositionOrientation, instructions } = robotData
-
-    const movements = instructions.reduce((moves: PositionAndOrientationAndLost[], instruction, index) => {
-      let newPosition: PositionAndOrientationAndLost
-      if (index === 0) {
-        newPosition = moveOrRotate(initialPositionOrientation, instruction, grid)
-      } else {
-        const prevPosition = moves[index - 1]
-
-        if (!isPositionAndOrientation(prevPosition)) {
-          return moves
-        }
-
-        newPosition = moveOrRotate([prevPosition[0], prevPosition[1], prevPosition[2]], instruction, grid)
-      }
-
-      moves.push(newPosition)
-
-      return moves
-    }, [])
-
-    const lastGoodPosition = movements[movements.length - 1].join(' ')
-
-    return `${result}${robotNumber !== 0 ? '\n' : ''}${lastGoodPosition}`
+    const { initialPosition, instructions, orientation } = robotData
+    const lastGoodPositionAndOrientation = moveOrRotate(initialPosition, orientation, instructions, grid)
+    return `${result}${robotNumber !== 0 ? '\n' : ''}${lastGoodPositionAndOrientation}`
   }, '')
 
   console.log(`Output: ${output}`)
@@ -73,12 +48,13 @@ export default function processRobots(input: string): string {
   return output
 }
 
+// CLI mode only requires getting an argument
 if (require.main === module) {
   const args = process.argv.slice(2)
-  const input = args.find((arg) => arg.startsWith('--input='))?.split('=')[1]
+  const input = args.find((arg) => arg.startsWith(INPUT_ARG))?.split('=')[1]
 
   if (!input) {
-    console.error('Please provide input using --input="<instructions>"')
+    console.error(`Please provide input using ${INPUT_ARG}="<instructions>"`)
     process.exit(1)
   }
 

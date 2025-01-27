@@ -1,15 +1,16 @@
-import { Direction, Orientation } from '../types'
+import { Rotation, Orientation } from '../types'
+import { DIRECTIONS, INSTRUCTIONS } from './constants'
 
-const rotate = (orientation: Orientation, direction: Direction): Orientation => {
+const rotate = (orientation: Orientation, rotation: Rotation): Orientation => {
   switch (orientation) {
-    case 'N':
-      return direction === 'L' ? 'W' : 'E'
-    case 'S':
-      return direction === 'L' ? 'E' : 'W'
-    case 'W':
-      return direction === 'L' ? 'S' : 'N'
-    case 'E':
-      return direction === 'L' ? 'N' : 'S'
+    case DIRECTIONS.NORTH:
+      return rotation === INSTRUCTIONS.LEFT ? DIRECTIONS.WEST : DIRECTIONS.EAST
+    case DIRECTIONS.SOUTH:
+      return rotation === INSTRUCTIONS.LEFT ? DIRECTIONS.EAST : DIRECTIONS.WEST
+    case DIRECTIONS.WEST:
+      return rotation === INSTRUCTIONS.LEFT ? DIRECTIONS.SOUTH : DIRECTIONS.NORTH
+    case DIRECTIONS.EAST:
+      return rotation === INSTRUCTIONS.LEFT ? DIRECTIONS.NORTH : DIRECTIONS.SOUTH
     default:
       return orientation
   }

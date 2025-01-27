@@ -3,55 +3,65 @@ import {
   Grid,
   Instruction,
   Orientation,
-  PositionAndOrientation,
   PositionAndOrientationAndLost,
+  ProcessInstructionsParams,
   Scent,
 } from '../types'
 import checkCoordinatesOffGrid from './checkCoordinatesOffGrid'
+import checkInScents from './checkScent'
 import moveInDirection from './moveInDirection'
 import rotate from './rotate'
+import { INSTRUCTIONS, LOST } from './constants'
 
 const scents: Scent[] = []
 
-const checkInScents = (position: Coordinates, orientation: Orientation) =>
-  scents.some((scent) => scent[0] === scent[0] && scent[1] === position[1] && scent[2] === orientation)
-
-const moveOrRotate = (
-  positionAndOrientation: PositionAndOrientation,
-  instruction: Instruction,
-  grid: Grid,
-): PositionAndOrientationAndLost => {
-  const currentPosition: Coordinates = [positionAndOrientation[0], positionAndOrientation[1]]
-  const currentOrientation: Orientation = positionAndOrientation[2]
-  let newPositionOrientationAndLost: PositionAndOrientationAndLost
-
-  if (grid?.[0] > 50 || grid?.[1] > 50) {
-    throw new Error('Grid upper bounds are greater than 50')
+const processInstructions = ({ position, orientation, instructions, grid, isRobotLost }: ProcessInstructionsParams): PositionAndOrientationAndLost => {
+  if (isRobotLost) {
+    return [...position, orientation, LOST];
   }
 
-  if (instruction === 'F') {
-    const newPosition: Coordinates = moveInDirection(currentPosition, currentOrientation)
+  // When all instructions are processed return current position and orientation
+  if (instructions.length === 0) {
+    return [...position, orientation];
+  }
 
-    // check if positions are off the grid
+  const [currentInstruction, ...restInstructions] = instructions
+
+  if (currentInstruction === INSTRUCTIONS.FORWARD) {
+    const newPosition: Coordinates = moveInDirection(position, orientation)
+
     if (checkCoordinatesOffGrid({ coordinates: newPosition, grid })) {
-      // when position is off gird check if there is scent of a prev robot that has been there with the same orientation
-      if (checkInScents(currentPosition, currentOrientation)) {
-        // Robot is safe and should not be moved off grid
-        newPositionOrientationAndLost = [...currentPosition, currentOrientation]
+      // When a move is going off gird check if there is scent already for this position and orientation
+      if (checkInScents(position, orientation, scents)) {
+        // Robot is safe and instruction to move off grid should be ignored
+        return processInstructions({ position, orientation, instructions: restInstructions, grid })
       } else {
-        // push the last on grid position to the scents
-        scents.push([...currentPosition, currentOrientation])
-        newPositionOrientationAndLost = [...currentPosition, currentOrientation, 'LOST']
+        // Robot is lost at this point, add last on grid known position and orientation to the scents
+        scents.push([...position, orientation])
+        return processInstructions({ position, orientation, instructions: restInstructions, grid, isRobotLost: true })
       }
     } else {
-      newPositionOrientationAndLost = [...newPosition, currentOrientation]
+      return processInstructions({ position: newPosition, orientation, instructions: restInstructions, grid })
     }
   } else {
-    const newOrientation: Orientation = rotate(currentOrientation, instruction)
-    newPositionOrientationAndLost = [...currentPosition, newOrientation]
+    const newOrientation: Orientation = rotate(orientation, currentInstruction)
+    return processInstructions({ position, orientation: newOrientation, instructions: restInstructions, grid })
+  }
+}
+
+const moveOrRotate = (
+  initialPosition: Coordinates,
+  orientation: Orientation,
+  instructions: Instruction[],
+  grid: Grid,
+): string => {
+
+  if (grid?.[0] > 50 || grid?.[1] > 50) {
+    throw new Error('Grid upper x or y limit is greater than 50')
   }
 
-  return newPositionOrientationAndLost
+  const lastGoodPositionAndOrientation = processInstructions({ position: initialPosition, orientation, instructions, grid })
+  return lastGoodPositionAndOrientation.join(' ')
 }
 
 export default moveOrRotate

@@ -1,14 +1,15 @@
 import { Coordinates, Orientation } from '../types'
+import { DIRECTIONS } from './constants'
 
 const moveInDirection = ([x, y]: Coordinates, orientation: Orientation): Coordinates => {
   switch (orientation) {
-    case 'N':
+    case DIRECTIONS.NORTH:
       return [x, y + 1]
-    case 'S':
+    case DIRECTIONS.SOUTH:
       return [x, y - 1]
-    case 'E':
+    case DIRECTIONS.EAST:
       return [x + 1, y]
-    case 'W':
+    case DIRECTIONS.WEST:
       return [x - 1, y]
     default:
       return [x, y]

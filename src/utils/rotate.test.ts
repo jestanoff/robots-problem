@@ -1,14 +1,14 @@
 import rotate from './rotate'
-import { Direction, Orientation } from '../types'
+import { Rotation, Orientation } from '../types'
 
-const CARDINAL_DIRECTIONS_ROTATE_LEFT_MATRIX: Array<[Orientation, Direction, Orientation]> = [
+const CARDINAL_DIRECTIONS_ROTATE_LEFT_MATRIX: Array<[Orientation, Rotation, Orientation]> = [
   ['N', 'L', 'W'],
   ['W', 'L', 'S'],
   ['S', 'L', 'E'],
   ['E', 'L', 'N'],
 ]
 
-const CARDINAL_DIRECTIONS_ROTATE_RIGHT_MATRIX: Array<[Orientation, Direction, Orientation]> = [
+const CARDINAL_DIRECTIONS_ROTATE_RIGHT_MATRIX: Array<[Orientation, Rotation, Orientation]> = [
   ['N', 'R', 'E'],
   ['W', 'R', 'N'],
   ['S', 'R', 'W'],
